@@ -7,6 +7,9 @@
   'use strict';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // A mouse can hover; a finger cannot. Pointer-tracking effects are wasted
+  // work on touch, where they only fire on tap and then stick.
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* ----------------------------------------------------------------------
      Theme — monochrome light / dark
@@ -225,7 +228,7 @@
      ---------------------------------------------------------------------- */
   function initSpotlight() {
     var cards = document.querySelectorAll('.card--spot');
-    if (!cards.length || reduceMotion) return;
+    if (!cards.length || reduceMotion || !finePointer) return;
 
     cards.forEach(function (card) {
       card.addEventListener('pointermove', function (e) {
@@ -489,21 +492,38 @@
       paint(!reduceMotion);
     }
 
-    window.addEventListener('pointermove', function (e) {
-      var rect = canvas.getBoundingClientRect();
-      pointer.x = e.clientX - rect.left;
-      pointer.y = e.clientY - rect.top;
-    }, { passive: true });
+    // Cursor repulsion is a mouse affordance. On touch the same listener
+    // would fire throughout every scroll gesture for no visible benefit.
+    if (finePointer) {
+      window.addEventListener('pointermove', function (e) {
+        var rect = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - rect.left;
+        pointer.y = e.clientY - rect.top;
+      }, { passive: true });
 
-    window.addEventListener('pointerleave', function () {
-      pointer.x = -9999;
-      pointer.y = -9999;
-    });
+      window.addEventListener('pointerleave', function () {
+        pointer.x = -9999;
+        pointer.y = -9999;
+      });
+    }
 
+    // Mobile browsers fire resize every time the URL bar slides away. Re-seeding
+    // there would make the field visibly jump mid-scroll, so a height-only
+    // change just resizes the backing bitmap and keeps the nodes where they are.
+    var lastWidth = window.innerWidth;
     var resizeTimer;
+
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(start, 180);
+      resizeTimer = setTimeout(function () {
+        if (window.innerWidth !== lastWidth) {
+          lastWidth = window.innerWidth;
+          start();                 // real width change: rebuild the field
+        } else {
+          size();                  // keep the bitmap crisp, keep the nodes
+          if (reduceMotion) paint(false);
+        }
+      }, 180);
     });
 
     // Repaint in the new ink when the theme flips, keeping node positions.

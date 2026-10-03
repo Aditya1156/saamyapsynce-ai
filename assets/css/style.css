@@ -150,7 +150,13 @@
 
 html {
   scroll-behavior: smooth;
+  /* Stop mobile Safari inflating type when the device is rotated. */
   -webkit-text-size-adjust: 100%;
+}
+
+/* The ripple is the press feedback; the native grey flash fights it. */
+a, button, [role="tab"], input, select, textarea, label {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -321,11 +327,13 @@ header, main, footer { position: relative; z-index: 2; }
 /* ==========================================================================
    5. LAYOUT PRIMITIVES
    ========================================================================== */
+/* Gutters respect the notch in landscape, where the cutout eats the edges. */
 .wrap {
   width: 100%;
   max-width: var(--maxw);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
 }
 
 .section { padding-block: var(--section); }
@@ -575,6 +583,9 @@ header, main, footer { position: relative; z-index: 2; }
 :root[data-theme="light"] .theme-toggle .icon-sun  { display: none; }
 
 .nav__toggle { display: none; }
+
+/* Shown only inside the open mobile drawer. */
+.nav__drawer-cta { display: none; }
 
 .nav__toggle span {
   display: block;
@@ -1160,7 +1171,9 @@ header, main, footer { position: relative; z-index: 2; }
   background: transparent;
   color: var(--on-surface);
   font-family: var(--font);
-  font-size: 0.95rem;
+  /* Must stay at 16px: iOS Safari zooms the viewport when a focused
+     control is any smaller, which strands the visitor mid-form. */
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -1174,7 +1187,7 @@ header, main, footer { position: relative; z-index: 2; }
 .field__box label {
   position: absolute;
   top: 16px; left: var(--sp-4);
-  font-size: 0.95rem;
+  font-size: 16px;
   color: var(--on-surface-faint);
   pointer-events: none;
   transform-origin: left top;
@@ -1303,7 +1316,7 @@ header, main, footer { position: relative; z-index: 2; }
 .site-footer {
   border-top: 1px solid var(--outline-soft);
   padding-top: clamp(50px, 7vw, 80px);
-  padding-bottom: var(--sp-6);
+  padding-bottom: calc(var(--sp-6) + env(safe-area-inset-bottom));
 }
 
 .footer__top {
@@ -1383,8 +1396,9 @@ header, main, footer { position: relative; z-index: 2; }
    ========================================================================== */
 .fab {
   position: fixed;
-  right: clamp(16px, 3vw, 32px);
-  bottom: clamp(16px, 3vw, 32px);
+  /* Clear the home indicator on gesture-navigation phones. */
+  right: max(clamp(16px, 3vw, 32px), env(safe-area-inset-right));
+  bottom: calc(clamp(16px, 3vw, 32px) + env(safe-area-inset-bottom));
   z-index: 90;
   display: grid;
   place-items: center;
@@ -1522,6 +1536,20 @@ header, main, footer { position: relative; z-index: 2; }
 
   .site-header.is-open .nav__links a[aria-current="page"]::after { display: none; }
 
+  /* The header CTA has no room on a phone, so the drawer carries its own.
+     Four classes outrank the generic drawer-link rule above. */
+  .site-header.is-open .nav__drawer-cta {
+    display: block;
+    margin-top: var(--sp-2);
+  }
+
+  .site-header.is-open .nav__drawer-cta .btn {
+    width: 100%;
+    min-height: 48px;
+    border-radius: var(--r-full);
+    font-size: 0.95rem;
+  }
+
   .col-2, .col-3, .col-4 { grid-column: span 6; }
   .tabs { grid-template-columns: 1fr; }
   .tabs__list { flex-direction: row; overflow-x: auto; padding-bottom: var(--sp-2); }
@@ -1531,7 +1559,9 @@ header, main, footer { position: relative; z-index: 2; }
 }
 
 @media (max-width: 560px) {
-  body { font-size: 15.5px; }
+  /* Stay at 16px: smaller body text on a phone is harder to read, not denser. */
+  body { font-size: 16px; }
+
   .facts { grid-template-columns: 1fr; }
   .footer__top { grid-template-columns: 1fr; }
   .card { padding: var(--sp-5); }
@@ -1540,6 +1570,120 @@ header, main, footer { position: relative; z-index: 2; }
   .brand__sub { display: none; }
   .ring__node { width: 54px; height: 54px; font-size: 0.8rem; }
   .fab { width: 50px; height: 50px; }
+
+  /* The hero is content-led on a phone; a forced full viewport just
+     pushes the headline off-screen behind the app bar. */
+  .hero {
+    min-height: auto;
+    padding-top: 104px;
+    padding-bottom: var(--sp-8);
+  }
+
+  .hero__inner { gap: var(--sp-7); }
+  .ring { width: min(78%, 300px); }
+
+  /* Tighter vertical rhythm so sections do not feel like separate pages. */
+  :root { --section: clamp(56px, 14vw, 80px); }
+
+  .sec-head { margin-bottom: var(--sp-6); }
+  .cta { padding: var(--sp-7) var(--sp-5); border-radius: var(--r-lg); }
+  .page-hero { padding-top: 116px; padding-bottom: var(--sp-6); }
+
+  .footer__bottom { flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+
+  /* Long unbroken strings (emails, CIN) must not force a sideways scroll. */
+  .detail a, .footer__col a, .footer__legal { overflow-wrap: anywhere; }
+}
+
+/* Very narrow devices (iPhone SE and similar) */
+@media (max-width: 380px) {
+  .display { font-size: 2.2rem; }
+  .h2 { font-size: 1.7rem; }
+  .brand__name { font-size: 0.84rem; }
+  .btn { padding-inline: var(--sp-5); font-size: 0.9rem; }
+  .ring { width: min(84%, 260px); }
+  .ring__node { width: 46px; height: 46px; font-size: 0.72rem; }
+  .ring__core strong { font-size: 1.05rem; }
+}
+
+/* Short viewports — landscape phones. The ring would otherwise consume
+   the whole screen before any text appears. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-top: 96px; padding-bottom: var(--sp-7); }
+  .hero__inner { grid-template-columns: 1fr 1fr; align-items: center; }
+  .ring { order: 0; width: min(100%, 240px); }
+  .page-hero { padding-top: 104px; }
+}
+
+/* ==========================================================================
+   24b. TOUCH AND COARSE POINTERS
+   On a touch screen :hover latches after a tap and stays until the next
+   one, so hover-only affordances are neutralised rather than left stuck.
+   ========================================================================== */
+@media (hover: none) {
+  .card:hover,
+  .ring__node:hover,
+  .btn:hover {
+    transform: none;
+  }
+
+  .card:hover { box-shadow: none; }
+  .card--spot:hover::before { opacity: 0; }
+  .btn::before, .icon-btn::before, .socials a::before, .fab::before,
+  .tabs__btn::before { transition: none; }
+  .btn:hover::before, .icon-btn:hover::before,
+  .socials a:hover::before, .fab:hover::before,
+  .tabs__btn:hover::before { opacity: 0; }
+
+  /* Pressed states still need to register, so keep the active layer. */
+  .btn:active::before, .icon-btn:active::before, .fab:active::before { opacity: 0.16; }
+
+  .marquee:hover .marquee__track { animation-play-state: running; }
+  .step:hover { background: transparent; }
+  .step:hover .step__num { color: var(--on-surface-faint); }
+  .fact:hover { background: var(--surface-1); }
+  .tag:hover { background: transparent; }
+}
+
+/* ==========================================================================
+   24c. MOBILE PERFORMANCE
+   Twenty-five simultaneously blurred surfaces is cheap on a laptop and
+   expensive on a mid-range phone. Scrolling smoothness wins over depth.
+   ========================================================================== */
+@media (max-width: 860px) {
+  :root { --blur: 14px; }
+
+  .card, .cta, .fact {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--surface-2);
+  }
+
+  .card--feature {
+    background:
+      linear-gradient(145deg, rgba(var(--state), 0.055), transparent 60%),
+      var(--surface-2);
+  }
+
+  /* The ambient blobs are the single most expensive paint on the page. */
+  .aurora span { filter: blur(70px); }
+  .grid-overlay { background-size: 56px 56px; }
+
+  /* Horizontal tab strip: snap to each tab and hide the scrollbar. */
+  .tabs__list {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent);
+  }
+
+  .tabs__list::-webkit-scrollbar { display: none; }
+  .tabs__btn { scroll-snap-align: start; }
+
+  /* Every control clears the 44px minimum touch target. */
+  .nav__links a { min-height: 48px; display: flex; align-items: center; }
+  .footer__col a { display: inline-block; padding-block: 2px; }
 }
 
 /* ==========================================================================
