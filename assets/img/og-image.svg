@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="sheen" x1="80" y1="250" x2="900" y2="430" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.42"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0.16" cy="0.08" r="0.62">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.11"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.88" cy="0.9" r="0.6">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.07"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 1200x630 card, centred in a square canvas for an exact centre crop -->
+  <rect width="1200" height="1200" fill="#070707"/>
+
+  <g transform="translate(0,285)">
+    <rect width="1200" height="630" fill="#070707"/>
+    <rect width="1200" height="630" fill="url(#glowA)"/>
+    <rect width="1200" height="630" fill="url(#glowB)"/>
+
+    <!-- Hairline grid, matching the site -->
+    <g stroke="#FFFFFF" stroke-opacity="0.045">
+      <path d="M0 80h1200M0 160h1200M0 240h1200M0 320h1200M0 400h1200M0 480h1200M0 560h1200"/>
+      <path d="M80 0v630M160 0v630M240 0v630M320 0v630M400 0v630M480 0v630M560 0v630M640 0v630M720 0v630M800 0v630M880 0v630M960 0v630M1040 0v630M1120 0v630"/>
+    </g>
+
+    <!-- Logo mark -->
+    <g transform="translate(80,66) scale(1.3)">
+      <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M30 13c-4.2-3.3-10.3-2.6-13.3 1.6-3.9-.5-7.4 2.4-7.6 6.3-3.3 1.6-4.7 5.7-3 9-2.3 2.8-1.9 7 .9 9.3.1 4 3.5 7.1 7.5 6.9 1.9 3.5 6.3 4.8 9.8 2.9 1.9-1 3.2-2.8 3.7-4.8" stroke-width="2.3"/>
+        <path d="M34 13c4.2-3.3 10.3-2.6 13.3 1.6 3.9-.5 7.4 2.4 7.6 6.3 3.3 1.6 4.7 5.7 3 9 2.3 2.8 1.9 7-.9 9.3-.1 4-3.5 7.1-7.5 6.9-1.9 3.5-6.3 4.8-9.8 2.9-1.9-1-3.2-2.8-3.7-4.8" stroke-width="2.3"/>
+        <path d="M32 11v42" stroke-width="2.3"/>
+        <path d="M32 21h-8M32 31h-11M32 41h-7M32 25h9M32 36h11" stroke-width="1.6" opacity="0.6"/>
+      </g>
+      <g fill="#FFFFFF">
+        <circle cx="24" cy="21" r="2.2"/><circle cx="21" cy="31" r="2.2"/><circle cx="25" cy="41" r="2.2"/>
+        <circle cx="41" cy="25" r="2.2"/><circle cx="43" cy="36" r="2.2"/>
+        <circle cx="32" cy="11" r="2.6"/><circle cx="32" cy="53" r="2.6"/>
+      </g>
+    </g>
+
+    <text x="184" y="112" font-family="Helvetica, Arial, sans-serif" font-size="29" font-weight="bold"
+          letter-spacing="3.5" fill="#FFFFFF">SAAMYA PSYNCE AI</text>
+    <text x="186" y="143" font-family="Courier New, monospace" font-size="13"
+          letter-spacing="6" fill="#FFFFFF" fill-opacity="0.5">ARTIFICIAL INTELLIGENCE</text>
+
+    <text x="80" y="322" font-family="Helvetica, Arial, sans-serif" font-size="76" font-weight="bold" fill="#FFFFFF">Where intelligence</text>
+    <text x="80" y="408" font-family="Helvetica, Arial, sans-serif" font-size="76" font-weight="bold" fill="url(#sheen)">meets immersion.</text>
+
+    <text x="80" y="474" font-family="Courier New, monospace" font-size="20" letter-spacing="2.2"
+          fill="#FFFFFF" fill-opacity="0.55">APPLIED AI / COMPUTER VISION / AR / VR / XR</text>
+
+    <!-- Discipline chips -->
+    <g font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="bold" fill="#FFFFFF">
+      <rect x="80"  y="518" width="84" height="46" rx="8" fill="none" stroke="#FFFFFF" stroke-opacity="0.22"/>
+      <text x="122" y="548" text-anchor="middle">AI</text>
+      <rect x="176" y="518" width="84" height="46" rx="8" fill="none" stroke="#FFFFFF" stroke-opacity="0.22"/>
+      <text x="218" y="548" text-anchor="middle">AR</text>
+      <rect x="272" y="518" width="84" height="46" rx="8" fill="none" stroke="#FFFFFF" stroke-opacity="0.22"/>
+      <text x="314" y="548" text-anchor="middle">VR</text>
+      <rect x="368" y="518" width="84" height="46" rx="8" fill="none" stroke="#FFFFFF" stroke-opacity="0.22"/>
+      <text x="410" y="548" text-anchor="middle">XR</text>
+    </g>
+
+    <text x="1120" y="548" text-anchor="end" font-family="Courier New, monospace" font-size="17"
+          fill="#FFFFFF" fill-opacity="0.45">saamyapsynce.com</text>
+
+    <!-- Node cluster -->
+    <g>
+      <g stroke="#FFFFFF" stroke-opacity="0.26" stroke-width="1.1">
+        <line x1="880" y1="196" x2="1010" y2="146"/>
+        <line x1="1010" y1="146" x2="1090" y2="262"/>
+        <line x1="880" y1="196" x2="950" y2="296"/>
+        <line x1="950" y1="296" x2="1090" y2="262"/>
+        <line x1="1010" y1="146" x2="1065" y2="92"/>
+      </g>
+      <g fill="#FFFFFF">
+        <circle cx="880" cy="196" r="4" fill-opacity="0.85"/>
+        <circle cx="1010" cy="146" r="3" fill-opacity="0.6"/>
+        <circle cx="1090" cy="262" r="4" fill-opacity="0.75"/>
+        <circle cx="950" cy="296" r="3" fill-opacity="0.55"/>
+        <circle cx="1065" cy="92" r="3" fill-opacity="0.5"/>
+      </g>
+    </g>
+  </g>
+</svg>
