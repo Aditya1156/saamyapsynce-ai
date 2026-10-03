@@ -12,54 +12,6 @@
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* ----------------------------------------------------------------------
-     Theme — monochrome light / dark
-     The inline script in each <head> has already applied the stored theme
-     before first paint; this only wires up the toggle.
-     ---------------------------------------------------------------------- */
-  function initTheme() {
-    var root = document.documentElement;
-    var toggles = document.querySelectorAll('.theme-toggle');
-
-    var label = function (theme) {
-      return theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
-    };
-
-    var apply = function (theme) {
-      root.setAttribute('data-theme', theme);
-      try { localStorage.setItem('theme', theme); } catch (e) { /* private mode */ }
-
-      toggles.forEach(function (btn) {
-        btn.setAttribute('aria-label', label(theme));
-        btn.setAttribute('title', label(theme));
-      });
-
-      // Let the hero canvas repaint in the new ink colour.
-      document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
-    };
-
-    toggles.forEach(function (btn) {
-      btn.setAttribute('aria-label', label(root.getAttribute('data-theme')));
-      btn.setAttribute('title', label(root.getAttribute('data-theme')));
-      btn.addEventListener('click', function () {
-        apply(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-      });
-    });
-
-    // Follow the OS only while the visitor has never chosen explicitly.
-    var mq = window.matchMedia('(prefers-color-scheme: light)');
-    var onSystemChange = function (e) {
-      var stored = null;
-      try { stored = localStorage.getItem('theme'); } catch (err) { /* ignore */ }
-      if (stored) return;
-      root.setAttribute('data-theme', e.matches ? 'light' : 'dark');
-      document.dispatchEvent(new CustomEvent('themechange'));
-    };
-
-    if (mq.addEventListener) mq.addEventListener('change', onSystemChange);
-    else if (mq.addListener) mq.addListener(onSystemChange);
-  }
-
-  /* ----------------------------------------------------------------------
      Material ripple
      ---------------------------------------------------------------------- */
   function initRipple() {
@@ -526,12 +478,6 @@
       }, 180);
     });
 
-    // Repaint in the new ink when the theme flips, keeping node positions.
-    document.addEventListener('themechange', function () {
-      readInk();
-      if (reduceMotion) paint(false);
-    });
-
     // Pause the loop when the tab is hidden — no point burning cycles.
     document.addEventListener('visibilitychange', function () {
       if (reduceMotion) return;
@@ -557,7 +503,6 @@
 
   /* ---------------------------------------------------------------------- */
   function init() {
-    initTheme();
     initRipple();
     initHeader();
     initFab();

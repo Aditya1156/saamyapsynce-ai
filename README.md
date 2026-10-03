@@ -83,10 +83,8 @@ details block in `contact.html` if you want it public.
 The site uses a **monochrome Material glass** system. There is no chroma anywhere — hierarchy
 is carried entirely by luminance, font weight and elevation.
 
-**Two themes.** Dark and light, both monochrome. The toggle sits in the header. The choice is
-saved to `localStorage`; visitors who have never chosen follow their operating system setting.
-A small inline script in each `<head>` applies the theme before first paint, so there is no
-flash of the wrong theme on load.
+**Dark only.** There is no light theme and no theme switcher — the site renders the same way
+for every visitor, on a near-black canvas.
 
 **Material foundations** in `assets/css/style.css`:
 
@@ -107,8 +105,8 @@ via an `@supports` block — no broken transparency.
 
 ### Re-theming
 
-Every value lives as a custom property at the top of the stylesheet, grouped per theme under
-`:root[data-theme="dark"]` and `:root[data-theme="light"]`. The ones worth knowing:
+Every value lives as a custom property on `:root` at the top of the stylesheet. The ones
+worth knowing:
 
 ```css
 --bg            /* page canvas */
@@ -116,7 +114,7 @@ Every value lives as a custom property at the top of the stylesheet, grouped per
 --glass         /* what sits over the blur */
 --outline       /* hairline borders */
 --on-surface    /* primary text (96% opacity) */
---accent        /* pure white in dark, near-black in light */
+--accent        /* pure white */
 --canvas-ink    /* hero particle colour, as an "R, G, B" triplet */
 ```
 
@@ -124,7 +122,8 @@ If you ever want colour back, set `--accent` and `--sheen` to a brand hue — ev
 downstream (buttons, focus rings, the active nav indicator, the FAB) follows automatically.
 The original colour theme is kept at `assets/img/logo-color.svg` for the mark.
 
-The logo ships white and is inverted by CSS in the light theme, so one file serves both.
+The logo is white throughout; `assets/img/logo-color.svg` keeps the original gradient mark
+if you ever want it back.
 
 **Note:** the header and footer are duplicated in each HTML file (there is no templating
 engine). If you change a navigation link, change it in all five files.
@@ -135,7 +134,7 @@ engine). If you change a navigation link, change it in all five files.
   canvas (which falls back to a single static frame) and the Material ripple.
 - The hero canvas pauses when the browser tab is hidden.
 - Full keyboard navigation, including arrow-key support on the industry tabs and a skip link.
-- Text contrast meets WCAG AA in both the light and dark themes.
+- Text contrast meets WCAG AA against the dark background.
 - Form errors are signalled by a weight change plus an "!" glyph, not colour — the palette has
   no red to signal with, so the cue works for colour-blind visitors by construction.
 - Structured data (`Organization` schema) is embedded in `index.html` so search engines
