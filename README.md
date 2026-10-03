@@ -150,3 +150,10 @@ as an **unlisted private company limited by shares**. The site therefore describ
 as a private limited company — stating otherwise in the footer of a public website would be a
 misrepresentation of a registered entity. Everything else from the record (CIN, incorporation
 date, registered address, both directors, RoC) is reproduced exactly.
+
+## Links
+
+- Live site: https://saamyapsynce-ai.vercel.app
+- Repository: https://github.com/Aditya1156/saamyapsynce-ai
+
+Pushes to `main` deploy to production automatically.
